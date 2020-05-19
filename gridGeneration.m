@@ -1,10 +1,10 @@
-function [ grid, u, v, p ] = gridGeneration( Lx, Ly, Nx, Ny)
+function [ grid, u, v, p ] = gridGeneration( Lx, Ly, Nx, Ny, alpha)
 
     grid.X = linspace(0, Lx, Nx+1);
     grid.Y = linspace(0, Ly, Ny+1);
         
-    grid.X = stretching(0.5, Nx);
-    grid.Y = stretching(0.5, Ny);
+    grid.X = stretching(alpha.x, Nx);
+    grid.Y = stretching(alpha.y, Ny);
  
     grid.dX = diff(grid.X)';
     grid.dY = diff(grid.Y)';

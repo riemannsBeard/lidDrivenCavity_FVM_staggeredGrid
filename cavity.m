@@ -9,13 +9,16 @@ Nx = 64; % Celdillas en x
 Ny = 64; % Celdillas en y
 Lx = 1;
 Ly = 1;
-tf = 20;
+tf = 10;
 CFL = 0.5;
 Ulid = 1;
 
 %% Staggered Grid Generation
 
-[grid, u, v, p] = gridGeneration(Lx, Ly, Nx, Ny);
+alpha.x = 0.5;
+alpha.y = 0.5;
+
+[grid, u, v, p] = gridGeneration(Lx, Ly, Nx, Ny, alpha);
 dt = CFL*min(grid.cellMin^2*Re, grid.cellMin);
 
 %% Boundary conditions
@@ -104,8 +107,8 @@ while t<= tf
   
     %% 2. Solve the Poisson Equation
     
-    bc2 = D.uW*(bc.uW*grid.dXp(1)) + D.uE*(bc.uE*grid.dXp(end)) + ...
-        D.vS*(bc.vS'*grid.dYp(end)) + D.vN*(bc.vN'*grid.dYp(1));
+    bc2 = D.uW*(bc.uW.*grid.dY) + D.uE*(bc.uE.*grid.dY) + ...
+        D.vS*(bc.vS'.*grid.dX) + D.vN*(bc.vN'.*grid.dX);
 
     RHS = G.G'*q + bc2;
     
@@ -211,11 +214,11 @@ title('Residuals')
 %% Validation
 close all
 
-uData = load('uData');
-vData = load('vData');
+uData = load('validation/uData_Re1000');
+vData = load('validation/vData_Re1000');
 
 % Interpolation
-yq = linspace(0, 1, 64);
+yq = grid.Y; %linspace(0, 1, 64);
 xq = yq*0 + 0.5;
 
 uInt = interp2(grid.x, grid.y, ua, xq, yq);

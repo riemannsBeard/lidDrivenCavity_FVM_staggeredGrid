@@ -1,4 +1,4 @@
-function [ Nhat, ua, va ] = convectionnHat(grid, u, v, Nx, Ny, bc)
+function [ Nhat, ua, va ] = convectionHat(grid, u, v, Nx, Ny, bc)
 
     u = reshape(u, Ny, Nx-1);
     v = reshape(v, Ny-1, Nx);
